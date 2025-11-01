@@ -1,0 +1,21 @@
+pluginManagement {
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.name = "YourGPT Android Example"
+include ':yourgpt-sdk'
+
+// Point to the SDK module
+project(':yourgpt-sdk').projectDir = new File(settingsDir, '../')
