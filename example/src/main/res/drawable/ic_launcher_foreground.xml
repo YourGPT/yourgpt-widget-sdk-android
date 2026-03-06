@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <!-- Chat bubble body: rounded rectangle with tail at bottom-left -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M38,30
+            L70,30
+            Q76,30 76,36
+            L76,60
+            Q76,66 70,66
+            L44,66
+            L36,74
+            L38,66
+            Q32,66 32,60
+            L32,36
+            Q32,30 38,30
+            Z" />
+
+    <!-- "Y" lettermark inside the bubble -->
+    <path
+        android:fillColor="#4F46E5"
+        android:pathData="
+            M43,36
+            L49,36
+            L54,44
+            L59,36
+            L65,36
+            L57,50
+            L57,60
+            L51,60
+            L51,50
+            Z" />
+</vector>

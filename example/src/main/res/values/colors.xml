@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Primary Colors -->
+    <color name="background_primary">#0B0B0F</color>
+    <color name="surface_primary">#131318</color>
+    <color name="surface_secondary">#1A1A1F</color>
+    <color name="surface_elevated">#1F1F26</color>
+    
+    <!-- Accent Colors -->
+    <color name="accent_primary">#4F46E5</color>
+    <color name="accent_secondary">#EC4899</color>
+    <color name="accent_tertiary">#06B6D4</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#F9FAFB</color>
+    <color name="text_secondary">#9CA3AF</color>
+    <color name="text_tertiary">#6B7280</color>
+    <color name="text_muted">#4B5563</color>
+    
+    <!-- Status Colors -->
+    <color name="profit_green">#10B981</color>
+    <color name="loss_red">#EF4444</color>
+    <color name="warning_yellow">#F59E0B</color>
+    
+    <!-- Common Colors -->
+    <color name="white">#FFFFFF</color>
+    <color name="black">#000000</color>
+    <color name="transparent">#00000000</color>
+    <color name="divider">#1F2937</color>
+    
+    <!-- Card Background -->
+    <color name="card_background">#18181B</color>
+    <color name="card_background_elevated">#1F1F23</color>
+    
+    <!-- Balance Card Colors -->
+    <color name="balance_card_bg">#18181B</color>
+    <color name="balance_text_label">#6B7280</color>
+</resources>

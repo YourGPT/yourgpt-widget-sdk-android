@@ -1,10 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
-    android:width="24dp"
-    android:height="24dp"
-    android:viewportWidth="24"
-    android:viewportHeight="24">
+    xmlns:aapt="http://schemas.android.com/aapt"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="48"
+    android:viewportHeight="48">
+
+    <!-- Rounded square background with gradient -->
+    <path android:pathData="M8,0L40,0Q48,0 48,8L48,40Q48,48 40,48L8,48Q0,48 0,40L0,8Q0,0 8,0Z">
+        <aapt:attr name="android:fillColor">
+            <gradient
+                android:startX="0"
+                android:startY="0"
+                android:endX="48"
+                android:endY="48"
+                android:type="linear">
+                <item android:offset="0.0" android:color="#FF4F46E5" />
+                <item android:offset="1.0" android:color="#FFEC4899" />
+            </gradient>
+        </aapt:attr>
+    </path>
+
+    <!-- Chat bubble (white) -->
     <path
-        android:fillColor="#FF6200EE"
-        android:pathData="M12,2C6.48,2 2,6.48 2,12s4.48,10 10,10 10,-4.48 10,-10S17.52,2 12,2zM13,17h-2v-6h2v6zM13,9h-2L11,7h2v2z"/>
+        android:fillColor="#FFFFFF"
+        android:pathData="
+            M15,12
+            L33,12
+            Q36,12 36,15
+            L36,30
+            Q36,33 33,33
+            L20,33
+            L16,37
+            L17,33
+            Q14,33 14,30
+            L14,15
+            Q14,12 15,12
+            Z" />
+
+    <!-- Y lettermark (indigo) -->
+    <path
+        android:fillColor="#4F46E5"
+        android:pathData="
+            M19,16
+            L22,16
+            L25,21
+            L28,16
+            L31,16
+            L27,24
+            L27,30
+            L23,30
+            L23,24
+            Z" />
 </vector>
