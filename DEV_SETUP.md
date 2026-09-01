@@ -127,11 +127,20 @@ cd example
 
 ### Working with Local SDK
 
-The example app is configured to use the local SDK module:
+By default, the example app uses the published SDK from JitPack:
+
+```kotlin
+// In example/build.gradle
+dependencies {
+    implementation 'com.github.YourGPT:yourgpt-widget-sdk-android:1.0.0'
+}
+```
+
+To develop against your local SDK sources instead, switch the example app to the local module:
 
 #### Module Dependencies
 ```kotlin
-// In example/build.gradle
+// In example/build.gradle — replace the JitPack dependency with:
 dependencies {
     implementation project(':yourgpt-sdk')
 }
@@ -139,7 +148,7 @@ dependencies {
 
 #### Settings Configuration
 ```kotlin
-// In example/settings.gradle
+// In example/settings.gradle — uncomment these lines:
 include ':yourgpt-sdk'
 project(':yourgpt-sdk').projectDir = new File(settingsDir, '../')
 ```
@@ -561,6 +570,31 @@ echo "Build completed successfully!"
    # Settings → Developer Options → Revoke USB debugging authorizations
    # Reconnect device and accept authorization dialog
    ```
+
+## Publishing a Release (JitPack)
+
+The SDK is published through [JitPack](https://jitpack.io/#YourGPT/yourgpt-widget-sdk-android), which builds directly from GitHub tags — no manual upload or signing needed.
+
+To release a new version:
+
+1. Update `versionName` in the root `build.gradle` and the `version` in its `publishing` block (and the version referenced in `README.md` / `example/build.gradle`).
+2. Verify the library builds standalone from the repo root:
+   ```bash
+   ./gradlew publishToMavenLocal
+   ```
+3. Merge to `main`, then create and push a tag matching the version:
+   ```bash
+   git tag 1.0.1
+   git push origin 1.0.1
+   ```
+4. JitPack builds the tag on first request. Trigger/verify it at
+   `https://jitpack.io/#YourGPT/yourgpt-widget-sdk-android` (the build log is available there if it fails).
+
+Consumers then use:
+
+```gradle
+implementation 'com.github.YourGPT:yourgpt-widget-sdk-android:<tag>'
+```
 
 ## Support Resources
 

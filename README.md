@@ -6,11 +6,27 @@ A Kotlin SDK for integrating YourGPT chatbot widget into Android applications.
 
 ### Installation
 
-Add the dependency to your app's `build.gradle` file:
+The SDK is distributed via [JitPack](https://jitpack.io/#YourGPT/yourgpt-widget-sdk-android).
+
+**Step 1:** Add the JitPack repository to your `settings.gradle`:
+
+```gradle
+dependencyResolutionManagement {
+    repositories {
+        google()
+        mavenCentral()
+        maven { url 'https://jitpack.io' }
+    }
+}
+```
+
+> If your project declares repositories in the root `build.gradle` instead, add `maven { url 'https://jitpack.io' }` to the `allprojects { repositories { ... } }` block there.
+
+**Step 2:** Add the dependency to your app's `build.gradle` file:
 
 ```gradle
 dependencies {
-    implementation 'com.yourgpt:android-sdk:1.0.0'
+    implementation 'com.github.YourGPT:yourgpt-widget-sdk-android:1.0.0'
     implementation 'androidx.webkit:webkit:1.8.0'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
 }
