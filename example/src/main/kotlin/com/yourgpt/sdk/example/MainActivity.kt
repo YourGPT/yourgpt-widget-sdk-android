@@ -1,143 +1,113 @@
 package com.yourgpt.sdk.example
 
+import android.Manifest
+import android.content.Intent
+import android.content.pm.PackageManager
+import android.net.Uri
+import android.os.Build
 import android.os.Bundle
-import android.widget.Button
-import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.lifecycleScope
-import com.yourgpt.sdk.*
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.launch
+import androidx.core.content.ContextCompat
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.yourgpt.sdk.YourGPTNotificationClient
+import com.yourgpt.sdk.YourGPTNotificationConfig
 
-class MainActivity : AppCompatActivity(), YourGPTEventListener {
-    
-    private lateinit var openBottomSheetButton: Button
-    private lateinit var statusText: TextView
+/**
+ * MainActivity demonstrating the simplest integration of YourGPT SDK
+ * with push notifications
+ */
+class MainActivity : AppCompatActivity() {
+
+    companion object {
+        /** Replace with your actual YourGPT widget UID */
+        const val WIDGET_UID = "your-widget-uid"
+    }
+
+    // Notification permission launcher for Android 13+
+    private val notificationPermissionLauncher = registerForActivityResult(
+        ActivityResultContracts.RequestPermission()
+    ) { isGranted: Boolean ->
+        if (isGranted) {
+            Toast.makeText(this, "Notifications enabled!", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Notifications disabled. You won't receive messages when app is closed.", Toast.LENGTH_LONG).show()
+        }
+    }
     
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         
-        setupUI()
-        setupSDK()
-        initializeSDK()
-    }
-    
-    private fun setupUI() {
-        openBottomSheetButton = findViewById(R.id.btn_open_bottom_sheet)
-        statusText = findViewById(R.id.tv_status)
-        
-        openBottomSheetButton.setOnClickListener {
-            openChatbotBottomSheet()
-        }
-        
-        // Disable button until SDK is ready
-        openBottomSheetButton.isEnabled = false
-        statusText.text = "SDK Status: Initializing..."
-    }
-    
-    private fun setupSDK() {
-        YourGPTSDK.setEventListener(this)
-        
-        // Observe SDK state changes
-        lifecycleScope.launch {
-            YourGPTSDK.stateFlow.collect { state ->
-                updateUIForSDKState(state)
-            }
-        }
-    }
-    
-    private fun initializeSDK() {
-        val configuration = YourGPTConfig(
-            widgetUid = "69dd8b5d-d4bf-444c-a40f-732d15248ae9",
+        // ===== SIMPLE INTEGRATION WITH CUSTOM ICON & SOUND =====
+
+        // 1. Build notification config with custom icon and sound
+        val notifConfig = YourGPTNotificationConfig.builder()
+            .setSmallIcon(R.drawable.ic_notification)
+            .setSoundUri(Uri.parse("android.resource://${packageName}/raw/notification_sound"))
+            .build()
+
+        // 2. Quick setup with YourGPT widget (Minimalist mode - handles everything automatically)
+        YourGPTNotificationClient.quickSetup(
+            context = this,
+            widgetUid = WIDGET_UID,
+            config = notifConfig
         )
         
-        lifecycleScope.launch {
-            try {
-                YourGPTSDK.initialize(configuration)
-            } catch (error: Exception) {
-                runOnUiThread {
-                    Toast.makeText(
-                        this@MainActivity,
-                        "SDK initialization failed: ${error.message}",
-                        Toast.LENGTH_LONG
-                    ).show()
+        // 3. Request notification permission for Android 13+
+        requestNotificationPermission()
+
+        // ===== END OF INTEGRATION =====
+
+        // Forward the intent to HomeScreenActivity (preserves notification extras)
+        val homeIntent = Intent(this, HomeScreenActivity::class.java)
+        intent?.let {
+            homeIntent.action = it.action
+            it.extras?.let { extras -> homeIntent.putExtras(extras) }
+        }
+        startActivity(homeIntent)
+        finish()
+    }
+    
+    private fun requestNotificationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            when {
+                ContextCompat.checkSelfPermission(
+                    this,
+                    Manifest.permission.POST_NOTIFICATIONS
+                ) == PackageManager.PERMISSION_GRANTED -> {
+                    // Permission already granted
+                }
+                else -> {
+                    // Request permission
+                    notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS)
                 }
             }
         }
-    }
-    
-    private fun updateUIForSDKState(state: YourGPTSDKState) {
-        runOnUiThread {
-            statusText.text = "SDK Status: ${state.connectionState.name.lowercase().replaceFirstChar { it.uppercase() }}"
-            
-            when (state.connectionState) {
-                YourGPTConnectionState.CONNECTED -> {
-                    statusText.setTextColor(0xFF28A745.toInt()) // Green
-                    openBottomSheetButton.isEnabled = true
-                }
-                YourGPTConnectionState.CONNECTING -> {
-                    statusText.setTextColor(0xFFFFC107.toInt()) // Orange
-                    openBottomSheetButton.isEnabled = false
-                }
-                YourGPTConnectionState.ERROR -> {
-                    statusText.setTextColor(0xFFDC3545.toInt()) // Red
-                    openBottomSheetButton.isEnabled = false
-                    state.error?.let {
-                        statusText.text = "SDK Error: $it"
-                    }
-                }
-                YourGPTConnectionState.DISCONNECTED -> {
-                    statusText.setTextColor(0xFF6C757D.toInt()) // Gray
-                    openBottomSheetButton.isEnabled = false
-                }
-            }
-        }
-    }
-    
-    private fun openChatbotBottomSheet() {
-        val configuration = YourGPTConfig(
-            widgetUid = "69dd8b5d-d4bf-444c-a40f-732d15248ae9",
-        )
-        
-        YourGPTSDK.openChatbotBottomSheet(supportFragmentManager, configuration)
-    }
-    
-    // YourGPTEventListener implementation
-    override fun onMessageReceived(message: Map<String, Any>) {
-        runOnUiThread {
-            Toast.makeText(
-                this,
-                "New message: $message",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-    
-    override fun onChatOpened() {
-        runOnUiThread {
-            Toast.makeText(this, "Chat opened", Toast.LENGTH_SHORT).show()
-        }
-    }
-    
-    override fun onChatClosed() {
-        runOnUiThread {
-            Toast.makeText(this, "Chat closed", Toast.LENGTH_SHORT).show()
-        }
-    }
-    
-    override fun onError(error: String) {
-        runOnUiThread {
-            Toast.makeText(this, "Error: $error", Toast.LENGTH_LONG).show()
-        }
-    }
-    
-    override fun onLoadingStarted() {
-        // Loading started - no toast message needed
-    }
-    
-    override fun onLoadingFinished() {
-        // Loading finished - no toast message needed
     }
 }
+
+/**
+ * ALTERNATIVE: Advanced Mode Example
+ * 
+ * If you need more control over notifications, you can use advanced mode:
+ * 
+ * class MainActivityAdvanced : AppCompatActivity() {
+ *     
+ *     override fun onCreate(savedInstanceState: Bundle?) {
+ *         super.onCreate(savedInstanceState)
+ *         
+ *         // Initialize with advanced mode for custom handling
+ *         YourGPTNotificationClient.initialize(
+ *             context = this,
+ *             widgetUid = "your-widget-uid",
+ *             mode = NotificationMode.ADVANCED
+ *         )
+ *         
+ *         // In advanced mode, you handle the notifications yourself
+ *         // You can create a custom FirebaseMessagingService (see CustomNotificationService.kt)
+ *         // and process notifications however you want
+ *     }
+ * }
+ */

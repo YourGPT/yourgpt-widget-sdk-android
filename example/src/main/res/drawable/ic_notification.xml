@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+
+    <!-- Chat bubble with Y cutout (monochrome for status bar) -->
+    <path
+        android:fillColor="@color/white"
+        android:fillType="evenOdd"
+        android:pathData="
+            M6,2
+            L20,2
+            Q22,2 22,4
+            L22,16
+            Q22,18 20,18
+            L10,18
+            L6,22
+            L7,18
+            Q4,18 4,16
+            L4,4
+            Q4,2 6,2
+            Z
+            M8,5
+            L10.5,5
+            L13,8.5
+            L15.5,5
+            L18,5
+            L14.5,10.5
+            L14.5,15
+            L11.5,15
+            L11.5,10.5
+            Z" />
+</vector>

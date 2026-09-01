@@ -2,11 +2,21 @@ plugins {
     id 'com.android.application' version '8.1.4'
     id 'org.jetbrains.kotlin.android' version '1.8.20'
     id 'org.jetbrains.kotlin.plugin.parcelize' version '1.8.20'
+    id 'com.google.gms.google-services' version '4.4.0'
 }
 
 android {
     namespace 'com.yourgpt.sdk.example'
     compileSdk 34
+
+    signingConfigs {
+        release {
+            storeFile file('release-keystore.jks')
+            storePassword 'android123'
+            keyAlias 'release-key'
+            keyPassword 'android123'
+        }
+    }
 
     defaultConfig {
         applicationId "com.yourgpt.sdk.example"
@@ -20,8 +30,10 @@ android {
 
     buildTypes {
         release {
-            minifyEnabled false
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     
@@ -47,9 +59,15 @@ dependencies {
     implementation 'androidx.constraintlayout:constraintlayout:2.1.4'
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.7.0'
     implementation 'androidx.webkit:webkit:1.8.0'
+    implementation 'androidx.core:core-splashscreen:1.0.1'
     
-    // Local SDK dependency
-    implementation project(':yourgpt-sdk')
+    // Navigation components
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.7.5'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.7.5'
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    
+    // YourGPT SDK (published via JitPack)
+    implementation 'com.github.YourGPT:yourgpt-widget-sdk-android:1.0.0'
     
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

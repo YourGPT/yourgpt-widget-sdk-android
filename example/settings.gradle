@@ -11,11 +11,13 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+        maven { url 'https://jitpack.io' }
     }
 }
 
 rootProject.name = "YourGPT Android Example"
-include ':yourgpt-sdk'
 
-// Point to the SDK module
-project(':yourgpt-sdk').projectDir = new File(settingsDir, '../')
+// For local SDK development, uncomment the lines below and swap the
+// dependency in build.gradle to: implementation project(':yourgpt-sdk')
+// include ':yourgpt-sdk'
+// project(':yourgpt-sdk').projectDir = new File(settingsDir, '../')

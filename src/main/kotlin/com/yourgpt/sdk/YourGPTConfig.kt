@@ -65,6 +65,18 @@ object YourGPTSDKConfig {
 
 
 /**
+ * Notification handling modes
+ */
+enum class NotificationMode {
+    /** Automatically handle everything - easiest integration */
+    MINIMALIST,
+    /** Allow custom handling with callbacks */
+    ADVANCED,
+    /** Disable notifications completely */
+    DISABLED
+}
+
+/**
  * Configuration data class for initializing the SDK
  */
 @Parcelize
@@ -74,7 +86,17 @@ data class YourGPTConfig(
     /** Enable debug logging */
     val debug: Boolean = YourGPTSDKConfig.Defaults.DEBUG,
     /** Custom parameters to pass to the widget */
-    val customParams: Map<String, String> = emptyMap()
+    val customParams: Map<String, String> = emptyMap(),
+    /** Enable push notifications for widget messages */
+    val enableNotifications: Boolean = false,
+    /** Notification handling mode */
+    val notificationMode: NotificationMode = NotificationMode.MINIMALIST,
+    /** Auto-register FCM token with backend */
+    val autoRegisterToken: Boolean = true,
+    /** FCM Server Key for push notifications (optional - can be auto-detected) */
+    val fcmServerKey: String? = null,
+    /** Custom notification configuration */
+    val notificationConfig: YourGPTNotificationConfig? = null
 ) : Parcelable {
     /**
      * Creates a copy of this config with updated parameters
@@ -82,6 +104,19 @@ data class YourGPTConfig(
     fun withParams(additionalParams: Map<String, String>): YourGPTConfig {
         val mergedParams = customParams + additionalParams
         return copy(customParams = mergedParams)
+    }
+    
+    /**
+     * Creates a copy of this config with notification settings
+     */
+    fun withNotifications(
+        enabled: Boolean,
+        notificationConfig: YourGPTNotificationConfig? = null
+    ): YourGPTConfig {
+        return copy(
+            enableNotifications = enabled,
+            notificationConfig = notificationConfig
+        )
     }
 }
 

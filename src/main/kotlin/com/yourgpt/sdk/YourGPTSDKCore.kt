@@ -41,7 +41,7 @@ class YourGPTSDKCore private constructor() {
         log("Initializing SDK with widgetUid: ${config.widgetUid}")
         
         if (config.widgetUid.isEmpty()) {
-            throw IllegalArgumentException("widgetUid is required for initialization")
+            throw YourGPTError.InvalidConfiguration("widgetUid is required for initialization")
         }
         
         _state.value = _state.value.copy(
@@ -85,16 +85,16 @@ class YourGPTSDKCore private constructor() {
             delay(1000)
             
             if (config.widgetUid.length < 3) {
-                throw IllegalArgumentException("Invalid widget UID")
+                throw YourGPTError.InvalidConfiguration("Invalid widget UID")
             }
-        } ?: throw IllegalStateException("SDK not configured")
+        } ?: throw YourGPTError.NotInitialized()
     }
     
     fun buildWidgetUrl(additionalParams: Map<String, String> = emptyMap()): String {
-        val config = this.config ?: throw IllegalStateException("SDK not initialized")
-        
+        val config = this.config ?: throw YourGPTError.NotInitialized()
+
         if (!isReady) {
-            throw IllegalStateException("SDK not ready")
+            throw YourGPTError.NotReady()
         }
         
         val configBuilder = createConfig(config)
@@ -144,7 +144,7 @@ class YourGPTSDKCore private constructor() {
     
     suspend fun updateConfig(newConfig: YourGPTConfig) {
         if (!_state.value.isInitialized) {
-            throw IllegalStateException("SDK not initialized")
+            throw YourGPTError.NotInitialized()
         }
         
         this.config = newConfig
