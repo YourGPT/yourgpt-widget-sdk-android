@@ -3,9 +3,9 @@
 A Kotlin SDK for integrating YourGPT chatbot widget into Android applications.
 
 <p align="center">
-  <img src="assets/demo1.png" alt="YourGPT chatbot widget demo" width="30%" />
-  <img src="assets/demo2.png" alt="YourGPT chatbot widget demo" width="30%" />
-  <img src="assets/demo3.png" alt="YourGPT chatbot widget demo" width="30%" />
+  <img src="assets/demo1.webp" alt="YourGPT chatbot widget demo" width="30%" />
+  <img src="assets/demo2.webp" alt="YourGPT chatbot widget demo" width="30%" />
+  <img src="assets/demo3.webp" alt="YourGPT chatbot widget demo" width="30%" />
 </p>
 
 ## Quick Start
